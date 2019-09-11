@@ -1,9 +1,15 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import NProgress from "nprogress";
+
+import "nprogress/nprogress.js";
+import "nprogress/nprogress.css";
 
 import login from "../views/login";
 import home from "../views/home";
 import article from "../views/home/article";
+import publish from "../views/home/publish";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -12,11 +18,21 @@ const routes = [
   {
     path: "/home",
     component: home,
-    children: [{ path: "/article", component: article }]
+    children: [
+      { path: "/article", component: article },
+      { path: "/publish", component: publish }
+    ]
   }
 ];
 
 const router = new VueRouter({
   routes
+});
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  next();
+});
+router.afterEach((to, from) => {
+  NProgress.done();
 });
 export default router;

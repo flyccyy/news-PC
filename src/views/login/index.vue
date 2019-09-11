@@ -86,6 +86,7 @@ export default {
               code: this.loginForm.code
             })
             .then(res => {
+              console.log(res)
                 this.$message.success("登录成功");
               let user = JSON.stringify(res.data.data);
               window.sessionStorage.setItem("user_info", user);

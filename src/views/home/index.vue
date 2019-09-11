@@ -24,7 +24,7 @@
                 <i class="el-icon-location"></i>
                 <span>内容管理</span>
               </template>
-              <el-menu-item index="1-1">发布文章</el-menu-item>
+              <el-menu-item index="/publish">发布文章</el-menu-item>
               <el-menu-item index="/article">内容列表</el-menu-item>
               <el-menu-item index="1-3">评论列表</el-menu-item>
               <el-menu-item index="1-4">素材管理</el-menu-item>
@@ -54,23 +54,23 @@
               <span>江苏传智播客教育科技股份有限公司</span>
             </el-col>
             <el-col :span="4" :offset="10">
-              <el-dropdown class="home-main-header-drop">
-                <img src="http://toutiao.meiduo.site/FlNNSyaHJ3LhMpeIaKYPkDWcblYM" width="40" alt />
+              <el-dropdown class="home-main-header-drop"  @command="handleCommand">
                 <span class="el-dropdown-link">
-                  下拉菜单
+                  <img :src="$store.state.userForm.photo" width="40" alt />
+                  <span>{{$store.state.userForm.name}}</span>
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>个人信息</el-dropdown-item>
                   <el-dropdown-item>github地址</el-dropdown-item>
-                  <el-dropdown-item>退出</el-dropdown-item>
+                  <el-dropdown-item command="logout">退出</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
           </el-row>
         </el-header>
         <el-main>
-            <router-view></router-view>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-main>
@@ -78,7 +78,19 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name:'home',
+  methods: {
+    handleCommand(command){
+      window.sessionStorage.removeItem('user_info');
+      this.$router.push('/login')
+    }
+  },
+  created(){
+    let obj = JSON.parse(window.sessionStorage.getItem('user_info'));
+    this.$store.commit('changeUser',obj)
+  }
+};
 </script>
 
 <style lang="less">
@@ -106,17 +118,19 @@ export default {};
       height: 100%;
       .home-main-header {
         background-color: pink;
-        .home-main-header-row{
-            height: 100%;
-            display:flex;
-            align-items: center;
-            .home-main-header-drop{
-                display:flex;
-                align-items: center;
-                img{
-                    border-radius:50%;
-                }
+        .home-main-header-row {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          .home-main-header-drop {
+            .el-dropdown-link{
+              display: flex;
+              align-items: center;
+              img {
+                border-radius: 50%;
+              }
             }
+          }
         }
       }
     }
