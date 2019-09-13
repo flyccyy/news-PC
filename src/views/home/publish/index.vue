@@ -13,6 +13,11 @@
         <el-radio :label="0">无图</el-radio>
         <el-radio :label="-1">自动</el-radio>
       </el-radio-group>
+      <el-row v-if="publishForm.cover.type>0">
+        <el-col :span="6" v-for="item in publishForm.cover.type" :key="item">
+          <uploadimg @uploadImgMedia="publishForm.cover.images[item-1]=$event"></uploadimg>
+        </el-col>
+      </el-row>
     </el-form-item>
     <el-form-item label="频道">
       <channel></channel>
@@ -30,11 +35,13 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import { quillEditor } from "vue-quill-editor";
 import channel from "../../../components/channel";
+import uploadimg from "./components/uploadimg.vue";
 export default {
   name: "publish",
   components: {
     quillEditor,
-    channel
+    channel,
+    uploadimg
   },
   data() {
     return {
