@@ -10,6 +10,7 @@ import home from "../views/home";
 import article from "../views/home/article";
 import publish from "../views/home/publish";
 import media from "../views/home/media";
+import account from "../views/home/account";
 
 Vue.use(VueRouter);
 
@@ -23,6 +24,7 @@ const routes = [
       { path: "/article", component: article },
       { path: "/publish", component: publish },
       { path: "/media", component: media },
+      { path: "/account", component: account },
     ]
   }
 ];
