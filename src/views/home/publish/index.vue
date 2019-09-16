@@ -20,11 +20,11 @@
       </el-row>
     </el-form-item>
     <el-form-item label="频道">
-      <channel></channel>
+      <channel @channelChange="publishForm.channel_id=$event"></channel>
     </el-form-item>
     <el-form-item>
       <el-button size="small">保存草稿</el-button>
-      <el-button size="small" type="primary">发布...</el-button>
+      <el-button size="small" type="primary" @click="toPublish">发布...</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -51,10 +51,32 @@ export default {
         cover: {
           type: 1,
           images: []
-        }
+        },
+        channel_id:''
       }
     };
-  }
+  },
+  methods: {
+    toPublish(){
+      this.$axios({
+        url:'/mp/v1_0/articles',
+        method:'POST',
+        params:{
+          draft:true
+        },
+        data:{
+          title:this.publishForm.title,
+          content:this.publishForm.content,
+          cover:this.publishForm.cover,
+          channel_id:this.publishForm.channel_id
+        }
+      }).then(res=>{
+        this.$message.success('发布成功')
+        this.$router.push('/article')
+        console.log(res);
+      })
+    }
+  },
 };
 </script>
 
