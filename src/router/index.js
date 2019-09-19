@@ -23,6 +23,7 @@ const routes = [
     children: [
       { path: "/article", component: article },
       { path: "/publish", component: publish },
+      { path:'/publish/:id',component:publish,name:'edit'},
       { path: "/media", component: media },
       { path: "/account", component: account },
     ]

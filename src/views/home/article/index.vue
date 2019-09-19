@@ -48,7 +48,7 @@
       <el-table-column prop="pubdate" label="发布时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="small" type="primary">修改</el-button>
+          <el-button size="small" type="primary" @click="doEdit(scope.row)">修改</el-button>
           <el-button size="small" type="danger" @click="doDel(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -81,6 +81,9 @@ export default {
     };
   },
   methods: {
+    doEdit(row){
+      this.$router.push('/publish/'+row.id)
+    },
     handleCurrentChange(page) {
       this.loadListData(page);
     },

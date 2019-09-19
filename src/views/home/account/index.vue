@@ -25,11 +25,11 @@
     <el-main>
       <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action=""
         :show-file-list="false"
-        :on-success="handleAvatarSuccess"
+        :http-request="customUpload"
       >
-        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <img v-if="accountForm.photo" :src="accountForm.photo" class="avatar" />
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
     </el-main>
@@ -46,7 +46,8 @@ export default {
         id: "",
         intro: "",
         email: "",
-        mobile: ""
+        mobile: "",
+        photo:''
       },
       imageUrl:''
     };
@@ -58,9 +59,16 @@ export default {
     });
   },
   methods: {
-      
-      handleAvatarSuccess(){
-    
+      customUpload(data){
+        let fd = new FormData();
+        fd.append('photo',data.file);
+        this.$axios.patch('/mp/v1_0/user/photo',fd).then(res=>{
+          this.accountForm.photo = res.data.data.photo
+          this.$store.commit('changeUser',this.accountForm)
+        })
+      },
+      handleAvatarSuccess(data){
+        this.imageUrl = data.file;
       }
   },
 };

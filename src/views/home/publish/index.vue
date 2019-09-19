@@ -20,11 +20,11 @@
       </el-row>
     </el-form-item>
     <el-form-item label="频道">
-      <channel @channelChange="publishForm.channel_id=$event"></channel>
+      <channel v-model="publishForm.channel_id"></channel>
     </el-form-item>
     <el-form-item>
       <el-button size="small">保存草稿</el-button>
-      <el-button size="small" type="primary" @click="toPublish">发布...</el-button>
+      <el-button size="small" type="primary" @click="toPublish('publishForm')">发布...</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -52,31 +52,57 @@ export default {
           type: 1,
           images: []
         },
-        channel_id:''
+        channel_id: ""
       }
     };
   },
-  methods: {
-    toPublish(){
-      this.$axios({
-        url:'/mp/v1_0/articles',
-        method:'POST',
-        params:{
-          draft:true
-        },
-        data:{
-          title:this.publishForm.title,
-          content:this.publishForm.content,
-          cover:this.publishForm.cover,
-          channel_id:this.publishForm.channel_id
-        }
-      }).then(res=>{
-        this.$message.success('发布成功')
-        this.$router.push('/article')
-        console.log(res);
-      })
+  created() {
+    if (this.$route.name == "edit") {
+      this.$axios
+        .get("/mp/v1_0/articles/" + this.$route.params.id)
+        .then(res => {
+          console.log(res);
+          this.publishForm = res.data.data;
+          // this.publishForm.channel_id = res.data.data.channel_id
+        });
     }
   },
+  methods: {
+    toPublish(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          //需要判断是修改还是新增
+          if (this.$route.name === "edit") {
+            this.$axios.put(`/mp/v1_0/articles/${this.$route.params.id}`,this.publishForm).then(res=>{
+              console.log(res)
+              if(res.data.message.toLowerCase()=='ok'){
+                this.$message.success('修改成功')
+                this.$router.push('/article')
+              }
+            })
+          } else {
+            this.$axios({
+              url: "/mp/v1_0/articles",
+              method: "POST",
+              params: {
+                draft: true
+              },
+              data: {
+                title: this.publishForm.title,
+                content: this.publishForm.content,
+                cover: this.publishForm.cover,
+                channel_id: this.publishForm.channel_id
+              }
+            }).then(res => {
+              this.$message.success("发布成功");
+              this.$router.push("/article");
+              console.log(res);
+            });
+          }
+        }
+      });
+    }
+  }
 };
 </script>
 

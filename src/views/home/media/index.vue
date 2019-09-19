@@ -15,7 +15,7 @@
         :headers="header"
         :show-file-list="false"
       >
-        <el-button size="small" type="primary" @>点击上传</el-button>
+        <el-button size="small" type="primary" >点击上传</el-button>
       </el-upload>
     </div>
     <el-row :gutter="20">
