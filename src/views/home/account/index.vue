@@ -18,7 +18,7 @@
           <el-input v-model="accountForm.email"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">保存更新</el-button>
+          <el-button type="primary" @click="saveProfile">保存更新</el-button>
         </el-form-item>
       </el-form>
     </el-aside>
@@ -69,6 +69,19 @@ export default {
       },
       handleAvatarSuccess(data){
         this.imageUrl = data.file;
+      },
+      saveProfile(){
+        this.$axios.patch('/mp/v1_0/user/profile',{
+          data:{
+            name:this.accountForm.name,
+            intro:this.accountForm.intro,
+            email:this.accountForm.emaile
+          }
+        }).then(res=>{
+          console.log(res)
+          this.$message.success('修改成功')
+          this.$store.commit('changeUser',this.accountForm)
+        })
       }
   },
 };

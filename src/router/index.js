@@ -11,6 +11,7 @@ import article from "../views/home/article";
 import publish from "../views/home/publish";
 import media from "../views/home/media";
 import account from "../views/home/account";
+import comment from "../views/home/comment"
 
 Vue.use(VueRouter);
 
@@ -23,9 +24,10 @@ const routes = [
     children: [
       { path: "/article", component: article },
       { path: "/publish", component: publish },
-      { path:'/publish/:id',component:publish,name:'edit'},
+      { path: "/publish/:id", component: publish, name: "edit" },
       { path: "/media", component: media },
       { path: "/account", component: account },
+      { path: "/comment", component: comment }
     ]
   }
 ];
